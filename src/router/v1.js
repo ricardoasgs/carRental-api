@@ -1,8 +1,18 @@
 import express from "express";
 import { signup, signin } from "../controllers/authController";
 import { findProfile } from "../controllers/userController";
-import { findCar, saveCar, updateCar } from "../controllers/carController";
-import { saveRent, finalizeRent } from "../controllers/rentController";
+import {
+  findCar,
+  saveCar,
+  updateCar,
+  findCars
+} from "../controllers/carController";
+import {
+  saveRent,
+  finalizeRent,
+  findRent,
+  findRents
+} from "../controllers/rentController";
 
 import authMiddleware from "../middlewares/auth";
 
@@ -23,10 +33,13 @@ router.get("/profile/:idProfile", findProfile);
 
 //Car
 router.get("/car/:carId", findCar);
+router.get("/car", findCars);
 router.post("/car", saveCar);
 router.put("/car", updateCar);
 
 //Rent
+router.get("/rent/:rentId", findRent);
+router.get("/rent", findRents);
 router.post("/rent", saveRent);
 router.put("/rent", finalizeRent);
 

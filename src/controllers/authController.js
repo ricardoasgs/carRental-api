@@ -1,6 +1,4 @@
-import express from "express";
 import bcrypt from "bcryptjs";
-import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import User from "../models/user";
 import authJson from "../config/auth.json";

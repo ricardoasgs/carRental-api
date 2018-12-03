@@ -1,5 +1,14 @@
 import Car from "../models/car";
 
+export async function findCars(req, res) {
+  try {
+    const cars = await Car.find();
+    return res.status(200).send(cars);
+  } catch (err) {
+    res.status(500).send({ message: "Error on find cars." });
+  }
+}
+
 export async function findCar(req, res) {
   const { carId } = req.params;
   try {
@@ -11,9 +20,8 @@ export async function findCar(req, res) {
 }
 
 export async function saveCar(req, res) {
-  const { model, year, type, color } = req.body;
   try {
-    const car = await Car.create(model, year, type, color);
+    const car = await Car.create(req.body);
     return res.status(200).send(car);
   } catch (err) {
     res.status(500).send({ message: "Error on create car." });

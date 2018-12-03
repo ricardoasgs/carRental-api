@@ -18,6 +18,14 @@ const CarSchema = new Schema({
     type: String,
     require: true
   },
+  plate: {
+    type: String,
+    require: true
+  },
+  price: {
+    type: Number,
+    require: true
+  },
   avaliable: {
     type: Boolean,
     default: true

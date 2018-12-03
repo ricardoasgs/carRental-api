@@ -1,42 +1,62 @@
 import Rent from "../models/rent";
-import CarController from "../controllers/carController";
-import UserController from "../controllers/userController";
+import Car from "../models/car";
+import User from "../models/user";
+
+export async function findRents(req, res) {
+  try {
+    const rents = await Rent.find();
+    return res.status(200).send(rents);
+  } catch (err) {
+    res.status(500).send({ message: "Error on find rents." });
+  }
+}
+
+export async function findRent(req, res) {
+  const { rentId } = req.params;
+  try {
+    const rent = await Car.findById(rentId).populate(["user", "car"]);
+    return res.status(200).send(rent);
+  } catch (err) {
+    res.status(500).send({ message: "Error on find Rent." });
+  }
+}
 
 export async function saveRent(req, res) {
-  const { userId, carId } = req.body;
+  const { user, car } = req.body;
   try {
-    const user = UserController.findProfile(req, res);
+    const users = await User.findById(user);
 
-    if (!user) return res.status(400).send({ message: "User Not Found." });
+    if (!users) return res.status(400).send({ message: "User Not Found." });
 
-    const car = CarController.findCar(req, res); //talvez usar let
+    let cars = await Car.findById(car);
 
-    if (!car) return res.status(400).send({ message: "Car Not Found." });
+    if (!cars.avaliable)
+      return res.status(400).send({ message: "Car Not Avaliable." });
 
-    const rent = await Rent.create(userId, carId);
+    const rent = await Rent.create({ user, car });
 
-    car.avaliable = false;
+    cars.avaliable = false;
 
-    await car.save();
+    await cars.save();
 
     return res.status(200).send(rent);
   } catch (err) {
-    res.status(500).send({ message: "Error on create rent." });
+    res.status(500).send({ message: err });
   }
 }
 
 export async function finalizeRent(req, res) {
   const { _id } = req.body;
   try {
-    const rent = await Rent.findById(_id);
+    let rent = await Rent.findById(_id);
 
     if (!rent) return res.status(400).send({ message: "Rent Not Found." });
 
-    const car = CarController.findCar(req, res); //talvez usar let
+    let car = await Car.findById(rent.car);
 
     if (!car) return res.status(400).send({ message: "Car Not Found." });
 
-    car.avaliable = avaliable;
+    car.avaliable = true;
 
     await car.save();
 
@@ -47,6 +67,6 @@ export async function finalizeRent(req, res) {
 
     return res.status(200).send(rent);
   } catch (err) {
-    res.status(500).send({ message: "Error on update rent." });
+    res.status(500).send({ message: err });
   }
 }
