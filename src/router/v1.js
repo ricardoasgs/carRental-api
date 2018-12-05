@@ -11,7 +11,8 @@ import {
   saveRent,
   finalizeRent,
   findRent,
-  findRents
+  findRents,
+  findRentByUser
 } from "../controllers/rentController";
 
 import authMiddleware from "../middlewares/auth";
@@ -40,6 +41,7 @@ router.put("/car", updateCar);
 //Rent
 router.get("/rent/:rentId", findRent);
 router.get("/rent", findRents);
+router.get("/rentByUser/:userId", findRentByUser);
 router.post("/rent", saveRent);
 router.put("/rent", finalizeRent);
 

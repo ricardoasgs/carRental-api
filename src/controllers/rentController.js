@@ -14,8 +14,18 @@ export async function findRents(req, res) {
 export async function findRent(req, res) {
   const { rentId } = req.params;
   try {
-    const rent = await Car.findById(rentId).populate(["user", "car"]);
+    const rent = await Rent.findById(rentId).populate(["user", "car"]);
     return res.status(200).send(rent);
+  } catch (err) {
+    res.status(500).send({ message: "Error on find Rent." });
+  }
+}
+
+export async function findRentByUser(req, res) {
+  const { userId } = req.params;
+  try {
+    const rents = await Rent.find({ user: userId }).populate(["user", "car"]);
+    return res.status(200).send(rents);
   } catch (err) {
     res.status(500).send({ message: "Error on find Rent." });
   }
