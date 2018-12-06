@@ -38,6 +38,11 @@ export async function saveRent(req, res) {
 
     if (!users) return res.status(400).send({ message: "User Not Found." });
 
+    const rents = await Rent.count({ user: user, active: true });
+
+    if (rents > 0)
+      return res.status(400).send({ message: "User is already renting." });
+
     let cars = await Car.findById(car);
 
     if (!cars.avaliable)
